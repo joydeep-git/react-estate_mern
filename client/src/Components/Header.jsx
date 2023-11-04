@@ -1,28 +1,41 @@
 import React from 'react';
 
+import { Link } from "react-router-dom";
+
 import { BiSearchAlt2 } from "react-icons/bi";
 
 const Header = () => {
     return (
-        <div className='bg-slate-100 shadow-md'>
+        <div className='bg-slate-100 shadow-md sticky transition duration-300'>
 
-            <div className='flex w-full m-auto flex-row items-center justify-between p-3'>
+            <div className='flex w-full m-auto flex-row items-center justify-around p-3'>
 
-                <h1 className='flex flex-wrap text-2xl font-bold'>
+                <Link to='/' className='hover:underline flex flex-wrap text-base md:text-2xl font-bold w-fit text-center'>
                     <span className='text-slate-600'>React</span>
                     &nbsp;
-                    <span className='text-slate-800'>Estates</span>
-                </h1>
+                    <span className='text-slate-800'>Estate</span>
+                </Link>
 
-                <form className='flex flex-row bg-white p-2 rounded-lg items-center justify-center'>
-                    <input type="text" placeholder='Search Property....' className='outline-none bg-transparent ' />
-                    <BiSearchAlt2 />
+                <form className='flex flex-row transition duration-300 bg-white p-1 rounded-lg items-center justify-center gap-1 md:gap-4 md:p-3 border border-slate-100 hover:border-black hover:cursor-pointer '>
+
+                    <input type="text" placeholder='Search....'
+                        className='outline-none bg-transparent w-28 md:w-60 ' />
+
+                    <BiSearchAlt2 className='text-2xl hover:text-orange-500' />
                 </form>
 
-                <ul className='flex flex-row'>
-                    <li>Home</li>
-                    <li>About</li>
-                    <li>Sign In</li>
+                <ul className='flex flex-row items-center text-[1rem] md:text-xl font-semibold transition duration-300'>
+                    <Link to='/' className=' hover:underline transition duration-300 hidden md:inline cursor-pointer hover:text-orange-600 mx-4'>
+                        Home
+                    </Link>
+
+                    <Link to='/about' className='hover:underline transition duration-300 hidden md:inline cursor-pointer hover:text-orange-600 mx-4'>
+                        About
+                    </Link>
+
+                    <Link to='/sign-in' className='hover:underline transition duration-300 cursor-pointer inline hover:text-green-600 mx-4 text-center'>
+                        Sign In
+                    </Link>
                 </ul>
 
             </div>
