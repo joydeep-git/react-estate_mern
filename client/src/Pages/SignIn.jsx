@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -15,12 +19,39 @@ const SignIn = () => {
     })
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormData({
-      email: "",
-      password: ""
-    });
+
+    try {
+      setLoading(true);
+      const res = await fetch("/api/auth/signin", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        setLoading(false);
+        alert(data.message);
+      } else {
+        navigate('/')
+      }
+
+      setLoading(false);
+
+      setFormData({
+        email: "",
+        password: ""
+      });
+
+    } catch (err) {
+      alert(err);
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,7 +82,10 @@ const SignIn = () => {
           onChange={handleChange}
         />
 
-        <button className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full uppercase'>Sign In</button>
+        <button disabled={loading}
+          className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full uppercase'>
+          {loading ? "Loading..." : "Sign In"}
+        </button>
         <button className='bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 w-full uppercase'>Continue with Google</button>
 
         <p className='text-lg'>
