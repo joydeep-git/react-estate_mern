@@ -14,8 +14,6 @@ const SignUp = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const [error, setError] = useState(null);
-
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -40,7 +38,7 @@ const SignUp = () => {
 
             if (data.success === false) {
                 setLoading(false);
-                setError(data.message);
+                alert(data.message);
             } else {
                 alert("User created successfully!");
                 navigate('/sign-in')
@@ -55,15 +53,9 @@ const SignUp = () => {
             });
         } catch (err) {
             setLoading(false);
-            setError(err);
+            alert(err);
         }
     };
-
-    useEffect(() => {
-        setTimeout(() => {
-            setError(null);
-        }, 1500);
-    }, [error]);
 
     return (
         <div className='flex flex-col items-center justify-center my-6 p-3'>
@@ -113,8 +105,6 @@ const SignUp = () => {
                     Already have an account? <Link to='/sign-in' className='text-blue-500 hover:underline font-semibold'>Sign In</Link>
                 </p>
             </form>
-
-            <p className="text-red-500 z-10">{error}</p>
         </div>
     );
 };
