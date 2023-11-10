@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 
 const SignIn = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
 
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
     setFormData({
@@ -23,7 +27,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: 'POST',
         headers: {
@@ -35,13 +39,11 @@ const SignIn = () => {
       const data = await res.json();
 
       if (data.success === false) {
-        setLoading(false);
-        alert(data.message);
+        dispatch(signInFailure(data.message));
       } else {
-        navigate('/')
+        dispatch(signInSuccess(data));
+        navigate('/');
       }
-
-      setLoading(false);
 
       setFormData({
         email: "",
@@ -49,10 +51,15 @@ const SignIn = () => {
       });
 
     } catch (err) {
-      alert(err);
-      setLoading(false);
+      dispatch(signInFailure(err.message));
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(signInFailure(null))
+    }, 3500);
+  }, [error]);
 
   return (
     <div className='flex flex-col items-center justify-center my-6 p-3'>
@@ -92,6 +99,8 @@ const SignIn = () => {
           Don't have an account? <Link to='/sign-up' className='text-blue-500 hover:underline font-semibold'>Sign Up</Link>
         </p>
       </form>
+
+      <p className='text-red-500 font-semibold  m-4'>{error}</p>
     </div>
   )
 }
