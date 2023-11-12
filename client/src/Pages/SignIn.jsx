@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import GoogleAuth from '../Components/GoogleAuth';
 
 const SignIn = () => {
 
@@ -93,14 +94,18 @@ const SignIn = () => {
           className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full uppercase'>
           {loading ? "Loading..." : "Sign In"}
         </button>
-        <button className='bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 w-full uppercase'>Continue with Google</button>
+
+        <GoogleAuth />
 
         <p className='text-lg'>
           Don't have an account? <Link to='/sign-up' className='text-blue-500 hover:underline font-semibold'>Sign Up</Link>
         </p>
       </form>
 
-      <p className='text-red-500 font-semibold  m-4'>{error}</p>
+      {
+        error && <p className='text-red-500 font-semibold  m-4'>{error}</p>
+      }
+
     </div>
   )
 }

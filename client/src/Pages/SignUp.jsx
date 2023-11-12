@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
+import GoogleAuth from "../Components/GoogleAuth";
 
 const SignUp = () => {
 
@@ -99,7 +100,8 @@ const SignUp = () => {
                     type="submit"
                     disabled={loading}
                     className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full uppercase'>{loading ? "Loading..." : "Sign Up"}</button>
-                <button className='bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 w-full uppercase'>Continue with Google</button>
+
+                <GoogleAuth />
 
                 <p className='text-lg'>
                     Already have an account? <Link to='/sign-in' className='text-blue-500 hover:underline font-semibold'>Sign In</Link>
