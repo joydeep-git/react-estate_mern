@@ -10,6 +10,7 @@ import Profile from './Pages/Profile';
 import About from './Pages/About';
 import Error from './Pages/Error';
 import Header from './Components/Header';
+import ProtectedRoutes from './Components/ProtectedRoutes';
 
 const App = () => {
   return (
@@ -19,9 +20,11 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
-        <Route path='/profile' element={<Profile />} />
         <Route path='/about' element={<About />} />
         <Route path='*' element={<Error />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path='/profile' element={<Profile />} />
+        </Route>
       </Routes>
     </Router>
   )

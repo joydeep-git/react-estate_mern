@@ -2,18 +2,23 @@ import React from 'react';
 
 import { Link } from "react-router-dom";
 
+import { useSelector } from "react-redux";
+
 import { BiSearchAlt2 } from "react-icons/bi";
 
 const Header = () => {
+
+    const { currentUser } = useSelector(state => state.user);
+
     return (
         <div className='bg-slate-100 shadow-md sticky transition duration-300'>
 
             <div className='flex w-full m-auto flex-row items-center justify-around p-3'>
 
                 <Link to='/' className='hover:underline flex flex-wrap text-base md:text-2xl font-bold w-fit text-center'>
-                    <span className='text-slate-600'>React</span>
+                    <span className='text-slate-600'>Home</span>
                     &nbsp;
-                    <span className='text-slate-800'>Estate</span>
+                    <span className='text-slate-800'>Estates</span>
                 </Link>
 
                 <form className='flex flex-row transition duration-300 bg-white p-1 rounded-lg items-center justify-center gap-1 md:gap-4 md:p-3 border border-slate-100 hover:border-black hover:cursor-pointer '>
@@ -33,8 +38,15 @@ const Header = () => {
                         About
                     </Link>
 
-                    <Link to='/sign-in' className='hover:underline transition duration-300 cursor-pointer inline hover:text-green-600 mx-4 text-center'>
-                        Sign In
+                    <Link to="/profile">
+                        {
+                            currentUser
+                                ? <img src={currentUser.rest.avatar} alt="Profile"
+                                    className='rounded-full overflow-hidden object-cover h-7 w-7 md:h-9 md:w-9 mx-4' />
+                                : <li className='hover:underline transition duration-300 cursor-pointer inline hover:text-green-600 mx-4 text-center'>
+                                    Sign In
+                                </li>
+                        }
                     </Link>
                 </ul>
 

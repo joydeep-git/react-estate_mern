@@ -2,10 +2,18 @@ import React, { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import GoogleAuth from "../Components/GoogleAuth";
+import { useSelector } from "react-redux";
 
 const SignUp = () => {
 
     const navigate = useNavigate();
+
+    const { user } = useSelector(state => state.user);
+
+    if (user) {
+        navigate('/');
+        return;
+    };
 
     const [formData, setFormData] = useState({
         username: "",
