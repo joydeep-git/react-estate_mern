@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { FaEyeSlash } from "react-icons/fa";
+import { IoEyeOutline } from "react-icons/io5";
+
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import GoogleAuth from '../Components/GoogleAuth';
@@ -14,6 +17,8 @@ const SignIn = () => {
     email: "",
     password: ""
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const { loading, error } = useSelector((state) => state.user);
 
@@ -80,15 +85,24 @@ const SignIn = () => {
           onChange={handleChange}
         />
 
-        <input
-          type="password"
-          name='password'
-          id='password'
-          placeholder='Enter Password'
-          className='border border-slate-500 p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
-          value={formData.password}
-          onChange={handleChange}
-        />
+        <div className='border border-slate-500 rounded-md w-full focus:outline-none flex flex-row gap-0 items-center pr-3'>
+          <input
+            type={showPassword ? "text" : "password"}
+            name='password'
+            id='password'
+            placeholder='Enter Password'
+            className='border-none p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
+            value={formData.password}
+            onChange={handleChange}
+          />
+          {
+            formData.password
+              ? showPassword
+                ? <FaEyeSlash onClick={() => setShowPassword(false)} className="cursor-pointer text-2xl" />
+                : <IoEyeOutline onClick={() => setShowPassword(true)} className="cursor-pointer text-2xl" />
+              : null
+          }
+        </div>
 
         <button disabled={loading}
           className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full uppercase'>

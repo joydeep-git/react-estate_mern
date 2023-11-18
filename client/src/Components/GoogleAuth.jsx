@@ -18,7 +18,7 @@ const GoogleAuth = () => {
             const auth = getAuth(app);
             const googleAuth = new GoogleAuthProvider(auth);
 
-            const googleUser = await signInWithPopup(auth, googleAuth);
+            const googleUser = await signInWithPopup(auth, googleAuth); console.log(googleUser);
 
             const res = await fetch("/api/auth/google", {
                 method: 'POST',
@@ -28,7 +28,7 @@ const GoogleAuth = () => {
                 body: JSON.stringify({
                     name: googleUser.user.displayName,
                     email: googleUser.user.email,
-                    avatar: googleUser.user.photoURL,
+                    avatar: googleUser.user.photoURL
                 })
             });
 

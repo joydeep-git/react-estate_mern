@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+import { FaEyeSlash } from "react-icons/fa";
+import { IoEyeOutline } from "react-icons/io5";
+
 import { Link, useNavigate } from "react-router-dom";
 import GoogleAuth from "../Components/GoogleAuth";
 import { useSelector } from "react-redux";
@@ -20,6 +23,7 @@ const SignUp = () => {
         email: "",
         password: ""
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -94,15 +98,24 @@ const SignUp = () => {
                     onChange={handleChange}
                 />
 
-                <input
-                    type="password"
-                    name='password'
-                    id='password'
-                    placeholder='Enter Password'
-                    className='border border-slate-500 p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
-                    value={formData.password}
-                    onChange={handleChange}
-                />
+                <div className='border border-slate-500 rounded-md w-full focus:outline-none flex flex-row gap-0 items-center pr-3'>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        name='password'
+                        id='password'
+                        placeholder='Enter Password'
+                        className='border-none p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
+                        value={formData.password}
+                        onChange={handleChange}
+                    />
+                    {
+                        formData.password
+                            ? showPassword
+                                ? <FaEyeSlash onClick={() => setShowPassword(false)} className="cursor-pointer text-2xl" />
+                                : <IoEyeOutline onClick={() => setShowPassword(true)} className="cursor-pointer text-2xl" />
+                            : null
+                    }
+                </div>
 
                 <button
                     type="submit"
