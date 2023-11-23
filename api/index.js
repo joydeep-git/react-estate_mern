@@ -1,8 +1,10 @@
 import express from 'express';
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 import authRouter from "./routers/auth.route.js";
+import userRouter from "./routers/user.route.js";
 
 dotenv.config();
 
@@ -12,12 +14,15 @@ mongoose.connect(process.env.MONGODB).then(() => {
 
 const app = express();
 
+app.use(cookieParser());
+
 app.use(express.json());
 
 app.listen(3000, () => {
     console.log('server running on port 3000');
 });
 
+app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
 app.use((err, req, res, next) => {

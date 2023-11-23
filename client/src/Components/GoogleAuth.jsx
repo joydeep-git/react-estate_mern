@@ -18,7 +18,7 @@ const GoogleAuth = () => {
             const auth = getAuth(app);
             const googleAuth = new GoogleAuthProvider(auth);
 
-            const googleUser = await signInWithPopup(auth, googleAuth); console.log(googleUser);
+            const googleUser = await signInWithPopup(auth, googleAuth);
 
             const res = await fetch("/api/auth/google", {
                 method: 'POST',
@@ -39,7 +39,7 @@ const GoogleAuth = () => {
             navigate("/");
 
         } catch (err) {
-            console.log("catch method:", err);
+            alert(err.message);
         }
     };
 

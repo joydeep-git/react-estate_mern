@@ -20,7 +20,7 @@ const SignIn = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading, error } = useSelector(state => state.user);
 
   const handleChange = (e) => {
     setFormData({

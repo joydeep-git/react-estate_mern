@@ -5,26 +5,26 @@ import { IoEyeOutline } from "react-icons/io5";
 
 import { CircularProgressBar } from "react-percentage-bar";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice.js";
 
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../Firebase.js";
 
 const Profile = () => {
 
-  const { currentUser } = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
-  const [userData, setUserData] = useState({
-    ...currentUser,
-    password: ""
-  });
+  const { currentUser, loading, error } = useSelector(state => state.user);
+
+  const [userData, setUserData] = useState({});
 
   const [showPassword, setShowPassword] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [file, setFile] = useState(undefined);
   const [uploadPerc, setUploadPerc] = useState(0);
-  const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [updateStatus, setUpdateStatus] = useState(false);
 
   const handleChange = (e) => {
     setUserData({
@@ -55,10 +55,8 @@ const Profile = () => {
 
       setUploadPerc(Math.round(progress));
     },
-      (error) => {
-        setError(true);
-        setErrorText("IMAGE UPLOAD FAILED");
-        console.log(error);
+      (err) => {
+        alert(err);
       },
       () => {
         getDownloadURL(uploadImg.snapshot.ref).then(
@@ -67,25 +65,50 @@ const Profile = () => {
               ...userData,
               avatar: downloadUrl
             })
-            setError(true);
-            setErrorText("PLEASE WAIT A FEW SECONDS TO SEE CHANGES");
           }
         )
       }
     )
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setError(false);
-    }, 2000);
-  }, [error]);
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      dispatch(updateUserStart());
+
+      const res = await fetch(`/api/user/update/${currentUser._id}`,
+        {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+      } else {
+        dispatch(updateUserSuccess(data));
+        setUpdateStatus(true);
+      }
+
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
+
+  };
 
   useEffect(() => {
     setTimeout(() => {
-      setErrorText('');
-    }, 3000);
-  }, [errorText]);
+      setUpdateStatus(false);
+    }, 2500);
+  }, [updateStatus])
 
   return (
     <div className="flex flex-col items-center justify-between my-6 p-3 ">
@@ -93,6 +116,7 @@ const Profile = () => {
       <h1 className="uppercase text-2xl font-bold m-5">profile</h1>
 
       <form
+        onSubmit={handleSubmit}
         className='flex flex-col gap-4 items-center bg-slate-100 p-6 rounded-md max-w-md w-full'>
 
         <div
@@ -138,8 +162,12 @@ const Profile = () => {
 
         {
           error
-            ? <p className="text-red-600">{errorText}</p>
-            : <p>UPLOAD IMAGES UPTO 2 MB</p>
+            ? <p className="text-red-600">{error}</p>
+            : <p>UPLOAD IMAGES UPTO 2 MB and Click UPDATE</p>
+        }
+
+        {
+          updateStatus ? <p className="text-green-500 text-xl uppercase">User updated successfully!</p> : null
         }
 
         <input
@@ -148,7 +176,7 @@ const Profile = () => {
           id="username"
           placeholder='Username '
           className='border border-slate-500 p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
-          value={userData.username}
+          defaultValue={currentUser.username}
           onChange={handleChange}
         />
 
@@ -158,7 +186,7 @@ const Profile = () => {
           id="email"
           placeholder='Email'
           className='border border-slate-500 p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
-          value={userData.email}
+          defaultValue={currentUser.email}
           onChange={handleChange}
         />
 
@@ -170,12 +198,11 @@ const Profile = () => {
             id='password'
             placeholder='Password'
             className='border-none p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
-            value={userData.password}
             onChange={handleChange}
           />
 
           {
-            userData.password
+            userData?.password
               ? showPassword
                 ? <FaEyeSlash onClick={() => setShowPassword(false)} className="cursor-pointer text-2xl" />
                 : <IoEyeOutline onClick={() => setShowPassword(true)} className="cursor-pointer text-2xl" />
@@ -185,8 +212,10 @@ const Profile = () => {
         </div>
 
         <button
+          disabled={loading}
+          type="submit"
           className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full uppercase'>
-          update
+          {loading ? "Loading..." : "update" }
         </button>
 
         <button
