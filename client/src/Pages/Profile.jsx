@@ -7,7 +7,7 @@ import { CircularProgressBar } from "react-percentage-bar";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice.js";
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserFailure, deleteUserSuccess, signInStart, signInFailure, signOutSuccess } from "../redux/user/userSlice.js";
 
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../Firebase.js";
@@ -102,6 +102,47 @@ const Profile = () => {
       dispatch(updateUserFailure(error.message));
     }
 
+  };
+
+  const handleDeleteAccount = async () => {
+    const ans = confirm("WANT TO DELETE THE ACCOUNT?");
+
+    if (ans) {
+      dispatch(deleteUserStart());
+
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE"
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
+        alert("USER DELETED");
+      }
+    }
+  };
+
+  const handleSignOut = async () => {
+
+    try {
+      dispatch(signInStart());
+
+      const res = await fetch("/api/auth/signout");
+
+      const data = await res.json();
+
+      if (data.status === false) {
+        dispatch(signInFailure(data.message));
+      } else {
+        dispatch(signOutSuccess());
+      }
+
+    } catch (err) {
+      alert(err);
+    }
   };
 
   useEffect(() => {
@@ -215,7 +256,7 @@ const Profile = () => {
           disabled={loading}
           type="submit"
           className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full uppercase'>
-          {loading ? "Loading..." : "update" }
+          {loading ? "Loading..." : "update"}
         </button>
 
         <button
@@ -224,8 +265,15 @@ const Profile = () => {
         </button>
 
         <div className="flex flex-row list-none justify-between w-full uppercase font-semibold">
-          <li className="text-red-600 cursor-pointer hover:text-red-400">Delete Account</li>
-          <li className="text-blue-600 cursor-pointer hover:text-blue-400">Sign Out</li>
+
+          <li
+            onClick={handleDeleteAccount}
+            className="text-red-600 cursor-pointer hover:text-red-400">Delete Account</li>
+
+          <li
+            onClick={handleSignOut}
+            className="text-blue-600 cursor-pointer hover:text-blue-400">Sign Out</li>
+
         </div>
 
         <p>Show listings</p>
