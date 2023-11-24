@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { FaEyeSlash, FaPen } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 
+import { useNavigate } from "react-router-dom";
+
 import { CircularProgressBar } from "react-percentage-bar";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -10,11 +12,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserFailure, deleteUserSuccess, signInStart, signInFailure, signOutSuccess } from "../redux/user/userSlice.js";
 
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+
 import { app } from "../Firebase.js";
 
 const Profile = () => {
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const { currentUser, loading, error } = useSelector(state => state.user);
 
@@ -145,6 +150,10 @@ const Profile = () => {
     }
   };
 
+  const navigatePage = () => {
+    navigate('/create-listing');
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setUpdateStatus(false);
@@ -260,6 +269,8 @@ const Profile = () => {
         </button>
 
         <button
+          type="button"
+          onClick={navigatePage}
           className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 w-full uppercase'>
           create listing
         </button>

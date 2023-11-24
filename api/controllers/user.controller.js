@@ -3,6 +3,7 @@ import { errorHandler } from "../utils/Error.js";
 import bcrypt from "bcrypt";
 
 import User from "../model/User.model.js";
+import Listing from "../model/Listing.model.js";
 
 export const updateUser = async (req, res, next) => {
 
@@ -45,5 +46,21 @@ export const deleteUser = async (req, res, next) => {
         res.status(200).json("User account Deleted!");
     } catch (err) {
         next(err);
+    }
+};
+
+export const getUserListings = async (req, res, next) => {
+
+    if (req.user.id === req.params.id) {
+
+        try {
+            const listings = await Listing.find({ useRef: req.params.id });
+            res.status(200).json(listings);
+        } catch (err) {
+            next(err);
+        }
+
+    } else {
+        next(errorHandler(401, "User can see their own listings only!"))
     }
 };

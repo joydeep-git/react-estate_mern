@@ -11,6 +11,7 @@ import About from './Pages/About';
 import Error from './Pages/Error';
 import Header from './Components/Header';
 import ProtectedRoutes from './Components/ProtectedRoutes';
+import CreateListing from './Pages/CreateListing';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='*' element={<Error />} />
         <Route element={<ProtectedRoutes />}>
           <Route path='/profile' element={<Profile />} />
+          <Route path='/create-listing' element={<CreateListing />} />
         </Route>
       </Routes>
     </Router>
