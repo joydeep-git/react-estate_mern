@@ -160,14 +160,14 @@ const Profile = () => {
       const data = await res.json();
 
       if (data.success === false) {
-        console.log('data not received');
+        alert("There is an error with API");
         return;
       }
 
       setUserListings(data);
 
     } catch (err) {
-      console.log(err);
+      alert(err.message);
     }
 
     setShowList(!showList);
@@ -181,6 +181,28 @@ const Profile = () => {
 
   const navigation = (link) => {
     navigate(link)
+  };
+
+  const deleteListing = async (id) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${id}`, {
+        method: "DELETE"
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        alert(data.message);
+        return;
+      }
+
+      const newListings = userListings.filter((item) => item._id !== id);
+
+      setUserListings(newListings);
+
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
@@ -326,17 +348,18 @@ const Profile = () => {
                   className="flex flex-row w-full sm:w-[30rem] bg-slate-100 border border-slate-600 rounded-lg m-2 p-1 sm:p-2 self-center items-center justify-between ">
 
                   <img
-                    onClick={() => navigation(`/listings/${item.id}`)}
+                    onClick={() => navigation(`/listings/${item._id}`)}
                     src={item.imageUrls[0]} alt="Property Image"
                     className="w-16 sm:w-2/12 rounded-lg cursor-pointer hover:border-2 border-black" />
 
                   <p
-                    onClick={() => navigation(`/listings/${item.id}`)}
+                    onClick={() => navigation(`/listings/${item._id}`)}
                     className="text-base sm:text-lg text-center m-0 p-0 hover:underline cursor-pointer uppercase">{item.name}</p>
 
                   <div className="flex flex-col items-center h-full justify-between gap-4 ">
                     <p className="text-blue-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">EDIT</p>
-                    <p className="text-red-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">DELETE</p>
+                    <p onClick={() => deleteListing(item._id)}
+                      className="text-red-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">DELETE</p>
                   </div>
                 </div>
               )
