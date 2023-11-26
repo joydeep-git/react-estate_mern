@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaEyeSlash, FaPen } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { CircularProgressBar } from "react-percentage-bar";
 
@@ -30,6 +30,8 @@ const Profile = () => {
   const [file, setFile] = useState(undefined);
   const [uploadPerc, setUploadPerc] = useState(0);
   const [updateStatus, setUpdateStatus] = useState(false);
+  const [userListings, setUserListings] = useState([]);
+  const [showList, setShowList] = useState(false);
 
   const handleChange = (e) => {
     setUserData({
@@ -150,15 +152,36 @@ const Profile = () => {
     }
   };
 
-  const navigatePage = () => {
-    navigate('/create-listing');
+  const handleShowListings = async () => {
+
+    try {
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        console.log('data not received');
+        return;
+      }
+
+      setUserListings(data);
+
+    } catch (err) {
+      console.log(err);
+    }
+
+    setShowList(!showList);
   };
 
   useEffect(() => {
     setTimeout(() => {
       setUpdateStatus(false);
     }, 2500);
-  }, [updateStatus])
+  }, [updateStatus]);
+
+  const navigation = (link) => {
+    navigate(link)
+  };
 
   return (
     <div className="flex flex-col items-center justify-between my-6 p-3 ">
@@ -270,7 +293,7 @@ const Profile = () => {
 
         <button
           type="button"
-          onClick={navigatePage}
+          onClick={() => navigation('/create-listing')}
           className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 w-full uppercase'>
           create listing
         </button>
@@ -287,9 +310,42 @@ const Profile = () => {
 
         </div>
 
-        <p>Show listings</p>
-      </form>
-    </div>
+        <button
+          onClick={handleShowListings}
+          type="button"
+          className="text-black uppercase text-lg p-1 border border-slate-500 rounded-lg hover:border-slate-800 hover:text-blue-500 ">{showList ? "Hide list" : "Show list"}</button>
+      </form >
+
+      {
+        showList
+          ? userListings.length > 0
+            ? userListings.map((item) => {
+              return (
+                <div
+                  key={item._id}
+                  className="flex flex-row w-full sm:w-[30rem] bg-slate-100 border border-slate-600 rounded-lg m-2 p-1 sm:p-2 self-center items-center justify-between ">
+
+                  <img
+                    onClick={() => navigation(`/listings/${item.id}`)}
+                    src={item.imageUrls[0]} alt="Property Image"
+                    className="w-16 sm:w-2/12 rounded-lg cursor-pointer hover:border-2 border-black" />
+
+                  <p
+                    onClick={() => navigation(`/listings/${item.id}`)}
+                    className="text-base sm:text-lg text-center m-0 p-0 hover:underline cursor-pointer uppercase">{item.name}</p>
+
+                  <div className="flex flex-col items-center h-full justify-between gap-4 ">
+                    <p className="text-blue-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">EDIT</p>
+                    <p className="text-red-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">DELETE</p>
+                  </div>
+                </div>
+              )
+            })
+            : <p className="uppercase text-red-500">Add Properties to see here</p>
+          : null
+      }
+
+    </div >
   );
 };
 
