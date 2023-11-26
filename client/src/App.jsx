@@ -12,6 +12,7 @@ import Error from './Pages/Error';
 import Header from './Components/Header';
 import ProtectedRoutes from './Components/ProtectedRoutes';
 import CreateListing from './Pages/CreateListing';
+import UpdateListing from './Pages/UpdateListing';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route element={<ProtectedRoutes />}>
           <Route path='/profile' element={<Profile />} />
           <Route path='/create-listing' element={<CreateListing />} />
+          <Route path='/update-listing/:id' element={<UpdateListing />} />
         </Route>
       </Routes>
     </Router>

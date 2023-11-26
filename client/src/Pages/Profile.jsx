@@ -184,24 +184,29 @@ const Profile = () => {
   };
 
   const deleteListing = async (id) => {
-    try {
-      const res = await fetch(`/api/listing/delete/${id}`, {
-        method: "DELETE"
-      });
 
-      const data = await res.json();
+    const res = confirm("WANT TO DELETE THIS PROPERTY? ")
 
-      if (data.success === false) {
-        alert(data.message);
-        return;
+    if (res) {
+      try {
+        const res = await fetch(`/api/listing/delete/${id}`, {
+          method: "DELETE"
+        });
+
+        const data = await res.json();
+
+        if (data.success === false) {
+          alert(data.message);
+          return;
+        }
+
+        const newListings = userListings.filter((item) => item._id !== id);
+
+        setUserListings(newListings);
+
+      } catch (err) {
+        alert(err.message);
       }
-
-      const newListings = userListings.filter((item) => item._id !== id);
-
-      setUserListings(newListings);
-
-    } catch (err) {
-      alert(err.message);
     }
   };
 
@@ -335,7 +340,7 @@ const Profile = () => {
         <button
           onClick={handleShowListings}
           type="button"
-          className="text-black uppercase text-lg p-1 border border-slate-500 rounded-lg hover:border-slate-800 hover:text-blue-500 ">{showList ? "Hide list" : "Show list"}</button>
+          className="text-black uppercase text-lg p-1 border border-slate-500 rounded-lg hover:border-slate-800 hover:text-blue-500 ">{showList ? "Hide Listed Properties" : "Show Listed Properties"}</button>
       </form >
 
       {
@@ -357,7 +362,9 @@ const Profile = () => {
                     className="text-base sm:text-lg text-center m-0 p-0 hover:underline cursor-pointer uppercase">{item.name}</p>
 
                   <div className="flex flex-col items-center h-full justify-between gap-4 ">
-                    <p className="text-blue-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">EDIT</p>
+                    <p
+                      onClick={() => navigation(`/update-listing/${item._id}`)}
+                      className="text-blue-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">EDIT</p>
                     <p onClick={() => deleteListing(item._id)}
                       className="text-red-600 cursor-pointer font-semibold hover:opacity-50 text-sm sm:text-base">DELETE</p>
                   </div>
