@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaEyeSlash, FaPen } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { CircularProgressBar } from "react-percentage-bar";
 
@@ -353,13 +353,13 @@ const Profile = () => {
                   className="flex flex-row w-full sm:w-[30rem] bg-slate-100 border border-slate-600 rounded-lg m-2 p-1 sm:p-2 self-center items-center justify-between ">
 
                   <img
-                    onClick={() => navigation(`/listings/${item._id}`)}
+                    onClick={() => navigation(`/listing/${item._id}`)}
                     src={item.imageUrls[0]} alt="Property Image"
                     className="w-16 sm:w-2/12 rounded-lg cursor-pointer hover:border-2 border-black" />
 
                   <p
-                    onClick={() => navigation(`/listings/${item._id}`)}
-                    className="text-base sm:text-lg text-center m-0 p-0 hover:underline cursor-pointer uppercase">{item.name}</p>
+                    onClick={() => navigation(`/listing/${item._id}`)}
+                    className="text-base sm:text-lg text-left m-0 p-0 hover:underline cursor-pointer uppercase">{item.name}</p>
 
                   <div className="flex flex-col items-center h-full justify-between gap-4 ">
                     <p
