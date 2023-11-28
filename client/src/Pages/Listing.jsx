@@ -2,9 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Loading from '../Components/Loading';
 
+// SWIPER IMPORTS
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore from 'swiper';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css/bundle';
+
 const Listing = () => {
 
-    const [formData, setFormData] = useState({});
+    SwiperCore.use([Navigation]);
+
+    const [listingData, setListingData] = useState({}); console.log(listingData);
     const [loading, setLoading] = useState(true);
 
     const listingId = useParams().id;
@@ -24,7 +33,7 @@ const Listing = () => {
                 return;
             }
 
-            setFormData(data);
+            setListingData(data);
         };
 
         fetchData();
@@ -39,7 +48,20 @@ const Listing = () => {
 
     return (
         <div>
-            {listingId}
+            {
+                <Swiper navigation>
+                    {
+                        listingData?.imageUrls?.map((img, index) => (
+                            <SwiperSlide key={index}>
+                                <div
+                                    className="h-[500px] bg-cover bg-center"
+                                    style={{ backgroundImage: `url(${img})` }}
+                                ></div>
+                            </SwiperSlide>
+                        ))
+                    }
+                </Swiper >
+            }
         </div>
     )
 }
