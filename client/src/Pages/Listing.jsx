@@ -13,7 +13,7 @@ const Listing = () => {
 
     SwiperCore.use([Navigation]);
 
-    const [listingData, setListingData] = useState({}); console.log(listingData);
+    const [listingData, setListingData] = useState({});
     const [loading, setLoading] = useState(true);
 
     const listingId = useParams().id;
@@ -54,7 +54,7 @@ const Listing = () => {
                         listingData?.imageUrls?.map((img, index) => (
                             <SwiperSlide key={index}>
                                 <div
-                                    className="h-[500px] bg-cover bg-center"
+                                    className="h-[500px] bg-contain bg-no-repeat bg-center"
                                     style={{ backgroundImage: `url(${img})` }}
                                 ></div>
                             </SwiperSlide>

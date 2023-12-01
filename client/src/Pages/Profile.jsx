@@ -160,7 +160,7 @@ const Profile = () => {
       const data = await res.json();
 
       if (data.success === false) {
-        alert("There is an error with API");
+        alert("Please Sign Out and Sign-in again");
         return;
       }
 
