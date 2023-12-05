@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Loading from '../Components/Loading';
+import { useSelector } from "react-redux";
 
 // SWIPER IMPORTS
 
@@ -12,13 +13,18 @@ import 'swiper/css/bundle';
 // REACT ICONS
 import { FaBath, FaBed, FaParking } from "react-icons/fa";
 import { GiSofa } from "react-icons/gi";
+import { FaLocationDot, FaCircleInfo } from "react-icons/fa6";
+import Contact from '../Components/Contact';
 
 const Listing = () => {
 
     SwiperCore.use([Navigation]);
 
+    const { currentUser } = useSelector(state => state.user);
+
     const [listingData, setListingData] = useState({});
     const [loading, setLoading] = useState(true);
+    const [showContact, setShowContact] = useState(false);
 
     const listingId = useParams().id;
 
@@ -48,7 +54,7 @@ const Listing = () => {
         return (
             <Loading />
         );
-    }; console.log(listingData);
+    };
 
     return (
         <div className=' m-2 md:m-7'>
@@ -72,9 +78,9 @@ const Listing = () => {
             <div className='flex w-full flex-col my-8 gap-5'>
                 <p className='md:text-4xl text-2xl font-bold uppercase'>{listingData.name}</p>
 
-                <p>Address:  {listingData.address}</p>
+                <p className='text-lg font-semibold flex flex-row flex-wrap items-center gap-4'>< FaLocationDot className='text-2xl' />   {listingData.address}</p>
 
-                <p>Description:  {listingData.description}</p>
+                <p className='text-lg font-semibold flex flex-row flex-wrap items-center gap-4 '><FaCircleInfo className='text-2xl' />  {listingData.description}</p>
             </div>
 
             <div className='flex flex-row flex-wrap gap-6 items-center my-4'>
@@ -89,7 +95,7 @@ const Listing = () => {
                 }
             </div>
 
-            <div className='flex flex-row flex-wrap my-6 mx-4 w-full justify-between md:justify-normal items-center gap-8 '>
+            <div className='flex flex-row flex-wrap my-6 mx-2 w-full items-center gap-2 justify-between md:justify-center md:gap-8 '>
                 <p className=' text-base flex flex-row items-center gap-3 md:text-xl  font-semibold text-blue-600'>
                     <FaBed /> {listingData.bedrooms} {listingData.bedrooms > 1 ? "Beds" : "Bed"}
                 </p>
@@ -102,20 +108,36 @@ const Listing = () => {
                 {
                     listingData.parking
                         ? <p className=' text-lg flex flex-row items-center gap-3 md:text-xl  font-semibold text-blue-600'> <FaParking /> PARKING </p>
-                        : <p>NO PARKING </p>
+                        : <p className='p-2 border-red-500 border-2 rounded-xl font-semibold'>NO PARKING </p>
                 }
 
                 {
                     listingData.furnished
                         ? <p className=' text-lg flex flex-row items-center gap-3 md:text-xl  font-semibold text-blue-600'> <GiSofa />  FURNISHED</p>
-                        : <p>NOT FURNISHED</p>
+                        : <p className='p-2 border-red-500 border-2 rounded-xl font-semibold'>NOT FURNISHED</p>
                 }
             </div>
 
-            <button
-                className='p-3 bg-blue-600 hover:bg-blue-700 rounded-xl border-white hover:border-slate-500 border-2 font-bold text-white cursor-pointer'
-                type="button">CONTACT LANDLORD</button>
-        </div>
+            {console.log(listingData)}
+            {console.log(currentUser)}
+
+            {
+                listingData?.userRef !== currentUser?._id
+
+                    ? (
+                        showContact
+                            ? <Contact state={setShowContact} listingData={listingData} />
+                            : <button
+                                onClick={() => setShowContact(true)}
+                                className='p-2.5 w-max bg-blue-600 hover:bg-blue-700 rounded-xl font-bold text-white cursor-pointer self-center flex m-auto uppercase'
+                                type="button">CONTACT LANDLORD</button>
+                    )
+                    : <Link
+                        to={`/update-listing/${listingData._id}`}
+                        className='p-2.5 w-max bg-blue-600 hover:bg-blue-700 rounded-xl font-bold text-white cursor-pointer self-center flex m-auto uppercase'
+                        type="button">EDIT PROPERTY</Link>
+            }
+        </div >
     )
 }
 
