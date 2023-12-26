@@ -118,9 +118,6 @@ const Listing = () => {
                 }
             </div>
 
-            {console.log(listingData)}
-            {console.log(currentUser)}
-
             {
                 listingData?.userRef !== currentUser?._id
 
@@ -129,7 +126,7 @@ const Listing = () => {
                             ? <Contact state={setShowContact} listingData={listingData} />
                             : <button
                                 onClick={() => setShowContact(true)}
-                                className='p-2.5 w-max bg-blue-600 hover:bg-blue-700 rounded-xl font-bold text-white cursor-pointer self-center flex m-auto uppercase'
+                                className='p-2.5 w-max bg-blue-600 hover:bg-blue-700 rounded-md font-bold text-white cursor-pointer self-center flex m-auto uppercase'
                                 type="button">CONTACT LANDLORD</button>
                     )
                     : <Link

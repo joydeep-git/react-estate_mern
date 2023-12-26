@@ -109,6 +109,10 @@ const Profile = () => {
       dispatch(updateUserFailure(error.message));
     }
 
+    setUserData({
+      ...userData,
+      password: ''
+    });
   };
 
   const handleDeleteAccount = async () => {
@@ -299,6 +303,7 @@ const Profile = () => {
             placeholder='Password'
             className='border-none p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
             onChange={handleChange}
+            value={userData?.password}
           />
 
           {

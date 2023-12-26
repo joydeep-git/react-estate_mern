@@ -16,9 +16,9 @@ const Header = () => {
             <div className='flex w-full m-auto flex-row items-center justify-around p-3'>
 
                 <Link to='/' className='hover:underline flex flex-wrap text-base md:text-2xl font-bold w-fit text-center'>
-                    <span className='text-slate-600'>Home</span>
+                    <span className='text-slate-600'>FLEX</span>
                     &nbsp;
-                    <span className='text-slate-800'>Estates</span>
+                    <span className='text-slate-800'>Properties</span>
                 </Link>
 
                 <form className='flex flex-row transition duration-300 bg-white p-1 rounded-lg items-center justify-center gap-1 md:gap-4 md:p-3 border border-slate-100 hover:border-black hover:cursor-pointer '>
