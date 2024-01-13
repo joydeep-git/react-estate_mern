@@ -326,7 +326,7 @@ const Profile = () => {
         <button
           type="button"
           onClick={() => navigation('/create-listing')}
-          className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 w-full uppercase'>
+          className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 w-full uppercase '>
           create listing
         </button>
 
