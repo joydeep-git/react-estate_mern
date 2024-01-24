@@ -7,56 +7,45 @@ import { useSelector } from "react-redux";
 import { BiSearchAlt2 } from "react-icons/bi";
 
 const Header = () => {
-
     const navigate = useNavigate();
-
     const { currentUser } = useSelector(state => state.user);
-
     const [searchTerm, setSearchTerm] = useState('');
-
     const [emptySearch, setEmptySearch] = useState(false);
 
-    const handleSubmit = async (e) => {
-
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (searchTerm === '') {
+        if (searchTerm.trim() === '') {
             setEmptySearch(true);
 
             setTimeout(() => {
                 setEmptySearch(false);
             }, 2500);
-
         } else {
+            setEmptySearch(false);
 
             const urlParams = new URLSearchParams(window.location.search);
-
             urlParams.set("searchTerm", searchTerm);
 
             const searchQuery = urlParams.toString();
-
             navigate(`/search?${searchQuery}`);
-
         }
-
     };
 
     useEffect(() => {
-
         const urlParams = new URLSearchParams(location.search);
-
         const search = urlParams.get("searchTerm");
-
-        setSearchTerm(search);
-
+        setSearchTerm(search || ''); // Ensure setSearchTerm gets a string
     }, [location.search]);
+
+    useEffect(() => {
+        localStorage.setItem("searchTerm", searchTerm);
+    }, [searchTerm]);
 
     return (
         <div className='bg-slate-100 shadow-md sticky transition duration-300'>
-
             <div className='flex w-full m-auto flex-row items-center justify-around p-3'>
-
-                <Link to='/' className='hover:underline flex flex-wrap text-base md:text-2xl font-bold w-fit text-center'>
+                <Link to='/' className='hover:underline flex flex-wrap text-sm  md:text-2xl font-bold w-fit '>
                     <span className='text-slate-600'>FLEX</span>
                     &nbsp;
                     <span className='text-slate-800'>Properties</span>
@@ -71,16 +60,14 @@ const Header = () => {
                         type="text" placeholder={emptySearch ? "Hey, I'm EMPTY" : 'Search....'}
                         className={`outline-none bg-transparent w-28 md:w-60 
                         ${emptySearch
-                                ? 'placeholder-red-500 font-semibold placeholder:text-center placeholder:text-xl'
+                                ? 'placeholder-red-500 font-semibold placeholder:text-center placeholder:text-sm md:placeholder:text-xl'
                                 : null} `}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        value={searchTerm.trimStart()}
+                        onChange={(e) => setSearchTerm(e.target.value.trimStart())}
+                        value={searchTerm}
                     />
 
-                    <button type="submit" onClick={handleSubmit}>
-                        <BiSearchAlt2
-                            onClick={handleSubmit}
-                            className='text-2xl hover:text-orange-500' />
+                    <button type="submit">
+                        <BiSearchAlt2 className='text-lg md:text-2xl hover:text-orange-500' />
                     </button>
                 </form>
 
@@ -106,7 +93,6 @@ const Header = () => {
                 </ul>
 
             </div>
-
         </div>
     )
 }

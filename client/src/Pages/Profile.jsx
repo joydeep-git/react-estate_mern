@@ -296,16 +296,6 @@ const Profile = () => {
 
         <div className="border border-slate-500 rounded-md w-full focus:outline-none flex flex-row gap-0 items-center pr-3">
 
-          {/* <input
-            type={showPassword ? "text" : "password"}
-            name='password'
-            id='password'
-            placeholder='Password'
-            className='border-none p-2 rounded-md w-full focus:outline-none  placeholder:text-xl'
-            onChange={handleChange}
-            value={userData?.password}
-          /> */}
-
           <input
             type={showPassword ? "text" : "password"}
             name="password"
