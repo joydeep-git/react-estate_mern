@@ -28,6 +28,13 @@ const Header = () => {
             urlParams.set("searchTerm", searchTerm);
 
             const searchQuery = urlParams.toString();
+
+            const fetchData = async () => {
+                const res = fetch(`/api/listing/search?${searchQuery}`)
+                const data = res.json();
+
+
+            };
             navigate(`/search?${searchQuery}`);
         }
     };
@@ -35,7 +42,7 @@ const Header = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         const search = urlParams.get("searchTerm");
-        setSearchTerm(search || ''); // Ensure setSearchTerm gets a string
+        setSearchTerm(search || '');
     }, [location.search]);
 
     useEffect(() => {
@@ -72,8 +79,10 @@ const Header = () => {
                 </form>
 
                 <ul className='flex flex-row items-center text-[1rem] md:text-xl font-semibold transition duration-300'>
-                    <Link to='/' className=' hover:underline transition duration-300 hidden md:inline cursor-pointer hover:text-orange-600 mx-4'>
-                        Home
+                    <Link
+                        to={`/search`}
+                        className='text-black border border-black font-semibold  rounded-lg px-2 py-1 text-lg hover:bg-slate-300 transition duration-300 hidden md:inline cursor-pointer mx-2'>
+                        Properties
                     </Link>
 
                     <Link to='/about' className='hover:underline transition duration-300 hidden md:inline cursor-pointer hover:text-orange-600 mx-4'>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormLabel, Checkbox, Stack, RadioGroup, Radio, Select, Button, Box, Center, useBreakpointValue } from '@chakra-ui/react';
+import { FormLabel, Checkbox, Stack, RadioGroup, Radio, Select, Button, Box, Center, useBreakpointValue, Input } from '@chakra-ui/react';
 
 const Filters = ({ setState, sideBar, setSideBar, submitForm }) => {
 
@@ -49,6 +49,20 @@ const Filters = ({ setState, sideBar, setSideBar, submitForm }) => {
                 overflowY="auto"
                 style={{ gap: "2rem" }}
             >
+                <Input
+                    type='email'
+                    placeholder='Search.....'
+                    className='placeholder:text-slate-800'
+                    border={"1px solid teal"}
+                    value={sideBar.searchTerm}
+
+                    onChange={
+                        (e) => setSideBar({
+                            ...sideBar,
+                            searchTerm: e.target.value
+                        })
+                    } />
+
                 <Box flexDirection='row'>
                     <FormLabel fontWeight={"700"} fontSize={"1.25rem"} style={{ textAlign: "center", textTransform: "uppercase" }}>Property type</FormLabel>
                     <RadioGroup name="type" value={sideBar?.type} onChange={handleTypeChange}
@@ -59,7 +73,7 @@ const Filters = ({ setState, sideBar, setSideBar, submitForm }) => {
                         <Radio size='lg' value='rent'>
                             RENT
                         </Radio>
-                        <Radio size='lg' value='sell'>
+                        <Radio size='lg' value='sale'>
                             SELL
                         </Radio>
                     </RadioGroup>
