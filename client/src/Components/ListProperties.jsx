@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Card,
     Stack,
@@ -15,6 +14,7 @@ import { Link } from 'react-router-dom';
 
 import { IoMdPin } from "react-icons/io";
 
+// eslint-disable-next-line react/prop-types
 const ListProperties = ({ listing }) => {
     return (
         <Card maxW={{ base: 'full', sm: 'sm', md: 'md', lg: 'lg', xl: 'xl' }} className='flex flex-col justify-between'>
@@ -35,9 +35,9 @@ const ListProperties = ({ listing }) => {
                         {listing.address}
                     </Text>
                     <Button
-                        colorScheme={listing.type === 'rent' ? 'teal' : 'Cyan'}
+                        disabled
+                        colorScheme="purple"
                         variant='outline'
-                        textColor={listing.type === 'rent' ? 'teal' : 'Cyan'}
                         size='sm'
                         width={{ base: 'full', md: '50%' }}
                     >
